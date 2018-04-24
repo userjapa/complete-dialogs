@@ -1,0 +1,33 @@
+<template>
+  <div>
+    <div>
+      <ul>
+        <li><router-link :to="{ name: 'Create' }">Create</router-link></li>
+        <li><router-link :to="{ name: 'Preview' }">Preview</router-link></li>
+      </ul>
+    </div>
+    <div>
+      <router-view></router-view>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name: "Main"
+}
+</script>
+<style lang="scss" scoped>
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
+}
+</style>

@@ -27,17 +27,20 @@
         </form>
       </div>
       <div>
-        <div v-for="aswr in audio.answers">
+        <div v-for="(aswr, index) in audio.answers">
           <input type="text" v-model="aswr.text">
           <input type="radio" name="correct" :checked="aswr.correct" @change="correctChange(aswr)">
           <span>Correct</span>
+          <button @click="removeAnswer(index)">Remove</button>
         </div>
       </div>
       <div>
-        <button @click="addAudio(audio)">Add Audio</button>
+        <button @click="addAudio(audio)" v-if="!isToUpdate">Add Audio</button>
+        <button @click="update(audio)" v-else>Edit</button>
+        <button @click="cancelUpdate()" v-if="isToUpdate">Calcel</button>
       </div>
       <div>
-        <div v-for="ex in audios">
+        <div v-for="(ex, index) in audios">
           <div>
             Source: {{ ex.src }}
           </div>
@@ -46,6 +49,10 @@
           </div>
           <div>
             Answers: {{ ex.answers.length }}
+          </div>
+          <div>
+            <button @click="edit(ex, index)">Edit</button>
+            <button @click="remove(index)">Remove</button>
           </div>
         </div>
       </div>
@@ -60,9 +67,26 @@ export default {
   data () {
     return {
       audio: {
-        src: '',
-        img: '',
-        answers: [],
+        src: 'https://vignette.wikia.nocookie.net/leagueoflegends/images/f/f2/Diana_Select.ogg/revision/latest?cb=20121119074638',
+        img: 'https://pa1.narvii.com/6523/f9c9f9becbc37e1cf7d3862e54a1b3e4ef88ecd2_128.gif',
+        answers: [
+          {
+            text: 'A new moon is rising',
+            correct: true
+          },
+          {
+            text: 'A new moon is raising',
+            correct: false
+          },
+          {
+            text: 'A new doom is raising',
+            correct: false
+          },
+          {
+            text: 'A few moon is rising',
+            correct: false
+          }
+        ],
         answered: false
       },
       answer: {
@@ -105,11 +129,32 @@ export default {
         if (x.text === answer.text) x.correct = true
         else x.correct = false
       })
+    },
+    edit (audio, index) {
+      this.audio = audio
+      this.$store.commit('setToUpdate', index)
+    },
+    update (audio) {
+      this.$store.commit('update', audio)
+      this.cancelUpdate()
+    },
+    cancelUpdate () {
+      this.$store.commit('setToUpdate', null)
+      this.resetAudio()
+    },
+    remove (index) {
+      this.$store.commit('remove', index)
+    },
+    removeAnswer (index) {
+      this.audio.answers.splice(index, 1)
     }
   },
   computed: {
     audios () {
       return this.$store.getters['getAudios']
+    },
+    isToUpdate () {
+      return this.$store.getters['isToUpdate']
     }
   },
   components: {

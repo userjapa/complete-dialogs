@@ -21,8 +21,15 @@ export default new VueX.Store({
     addAudio (state, audio) {
       state.audios.push(audio)
     },
-    toUpdate (state, id) {
+    setToUpdate (state, id) {
       state.toUpdate = id
+    },
+    update (state, audio) {
+      const index = state.toUpdate
+      state.audios[index] = audio
+    },
+    remove (state, index) {
+      state.audios.splice(index, 1)
     }
   }
 })

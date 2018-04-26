@@ -102,15 +102,21 @@ export default {
       return false
     },
     checkCurrent (index) {
+      index = parseInt(index)
       if (this.oldIndex === null) this.oldIndex = index
       else this.oldIndex = this.currentIndex
       this.currentIndex = index
-      console.log(this.oldIndex, index);
+      console.log(this.currentIndex, this.oldIndex);
       if (!(this.oldIndex === index)) this.resetBackground()
       this.current = this.audios[index]
     },
     viewCurrent (audio, index) {
       if (audio.answered && this.audios[this.currentIndex].answered) this.checkCurrent(index)
+    },
+    checkSelected (audio) {
+      const index = audio.answers.findIndex(x => x.selected)
+      if (index >= 0) return true
+      else return false
     }
   },
   components: {

@@ -38,7 +38,8 @@ export default {
         answered: false
       },
       ended: false,
-      currentIndex: null
+      currentIndex: null,
+      oldIndex: null
     }
   },
   methods: {
@@ -101,12 +102,15 @@ export default {
       return false
     },
     checkCurrent (index) {
+      if (this.oldIndex === null) this.oldIndex = index
+      else this.oldIndex = this.currentIndex
       this.currentIndex = index
-      this.resetBackground()
+      console.log(this.oldIndex, index);
+      if (!(this.oldIndex === index)) this.resetBackground()
       this.current = this.audios[index]
     },
     viewCurrent (audio, index) {
-      if (audio.answered) this.checkCurrent(index)
+      if (audio.answered && this.audios[this.currentIndex].answered) this.checkCurrent(index)
     }
   },
   components: {

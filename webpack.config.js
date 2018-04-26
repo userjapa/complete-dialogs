@@ -58,6 +58,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
+        include: '/node_modules/vue-awesome',
         exclude: /node_modules/
       },
       {

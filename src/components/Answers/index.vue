@@ -1,36 +1,38 @@
 <template>
-  <div>
-    <div>
-      <div
-        v-for="(ex, index) in audios"
-        :ref="`audio${index}`"
-        :class="{
-          disabled: !ex.answered,
-          success: (ex.answered && checkAnswer(ex.answers)),
-          failed: (ex.answered && !checkAnswer(ex.answers))
-        }"
-        @click="viewCurrent(ex, index)"
-      >
-        <AudioPlayer :audio="ex"/>
+<div class="item-border">
+
+  <div class="container align-items-start wrap">
+    <div class="flex-basis-300 flex-grow-1 item margin-10 item-border">
+      <div v-for="(ex, index) in audios" :ref="`audio${index}`" :class="{
+            disabled: !ex.answered,
+            success: (ex.answered && checkAnswer(ex.answers)),
+            failed: (ex.answered && !checkAnswer(ex.answers))
+          }" @click="viewCurrent(ex, index)">
+        <AudioPlayer :audio="ex" />
       </div>
     </div>
-    <div>
+
+    <div class="item margin-10 item-border flex-basis-300 flex-grow-1 list-content">
       <div v-for="(aswr, index) in current.answers" @click="selectAnswer(aswr, $event.target)" :ref="`answer${index}`" :class="{ right: checkRight(aswr, current), wrong: checkWrong(aswr, current) }">
-        {{ aswr.text }}
+        <input type="radio" name="aswrs" value="" :id="'aswr-audio-' + index" class="margin-right-10">
+        <label :for="'aswr-audio-' + index">{{ aswr.text }}</label>
       </div>
-    </div>
-    <div>
-      <button @click="setCurrent(audios)" v-if="current.answered && !ended">Next</button>
-      <p v-if="ended">You've finished!</p>
     </div>
   </div>
+
+  <div>
+    <button @click="setCurrent(audios)" v-if="current.answered && !ended" class="btn btn-primary">Next</button>
+    <p v-if="ended">You've finished!</p>
+  </div>
+
+</div>
 </template>
 <script>
 import AudioPlayer from '../../components/AudioPlayer'
 
 export default {
   name: "Answers",
-  data () {
+  data() {
     return {
       audios: [],
       current: {
@@ -43,7 +45,7 @@ export default {
     }
   },
   methods: {
-    setCurrent (audios) {
+    setCurrent(audios) {
       for (const index in audios) {
         if (!audios[index].answered) {
           setTimeout(() => {
@@ -59,7 +61,7 @@ export default {
         }
       }
     },
-    selectAnswer (answer, el) {
+    selectAnswer(answer, el) {
       if (!this.current.answered) {
         answer.selected = true
         const elAudio = this.$refs[`audio${this.currentIndex}`][0]
@@ -75,33 +77,33 @@ export default {
         this.current.answered = true
       }
     },
-    resetBackground () {
+    resetBackground() {
       const right = document.querySelector('.right')
       const wrong = document.querySelector('.wrong')
       if (right) right.classList.remove('right')
       if (wrong) wrong.classList.remove('wrong')
     },
-    setGame (audios) {
+    setGame(audios) {
       this.ended = false
       this.audios = audios
       this.setCurrent(this.audios)
     },
-    checkRight (answer, audio) {
+    checkRight(answer, audio) {
       if (answer.correct && audio.answered) return true
       else return false
     },
-    checkWrong (answer, audio) {
+    checkWrong(answer, audio) {
       if (answer.selected && !answer.correct && audio.answered) return true
       else return false
     },
-    checkAnswer (answers) {
+    checkAnswer(answers) {
       const selectedIndex = answers.findIndex(x => x.selected)
       if (selectedIndex >= 0) {
         if (answers[selectedIndex].correct) return true
       }
       return false
     },
-    checkCurrent (index) {
+    checkCurrent(index) {
       index = parseInt(index)
       if (this.oldIndex === null) this.oldIndex = index
       else this.oldIndex = this.currentIndex
@@ -110,10 +112,10 @@ export default {
       if (!(this.oldIndex === index)) this.resetBackground()
       this.current = this.audios[index]
     },
-    viewCurrent (audio, index) {
+    viewCurrent(audio, index) {
       if (audio.answered && this.audios[this.currentIndex].answered) this.checkCurrent(index)
     },
-    checkSelected (audio) {
+    checkSelected(audio) {
       const index = audio.answers.findIndex(x => x.selected)
       if (index >= 0) return true
       else return false
@@ -125,23 +127,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.right {
-  background-color: green;
-}
-
-.wrong {
-  background-color: red;
-}
-
-.disabled {
-  background-color: gray
-}
-
-.failed {
-  background-color: red
-}
-
-.success {
-  background-color: green
+.list-content {
+    text-align: left;
+    display: block;
+    > div {
+        margin-bottom: 10px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 </style>

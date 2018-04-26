@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div>
-      <h2>Preview</h2>
-    </div>
-    <div>
-      <Answers ref="answers"/>
-    </div>
+    <Answers ref="answers"/>
   </div>
 </template>
 <script>

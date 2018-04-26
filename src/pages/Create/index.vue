@@ -12,7 +12,7 @@
     <div>
       <div>
         <label for="audio_source">Source</label>
-        <input id="audio_source" type="text" v-model="audio.src" @click="audio.src = 'https://vignette.wikia.nocookie.net/leagueoflegends/images/f/f2/Diana_Select.ogg/revision/latest?cb=20121119074638'"/>
+        <input id="audio_source" type="text" v-model="audio.src" @click="audio.src = 'https://vignette.wikia.nocookie.net/leagueoflegends/images/8/89/Katarina.attack1.ogg/revision/latest?cb=20121127000346'"/>
       </div>
       <div>
         <label for="audio_image">Image</label>
@@ -71,7 +71,8 @@ export default {
   data () {
     return {
       audio: {
-        src: 'https://vignette.wikia.nocookie.net/leagueoflegends/images/f/f2/Diana_Select.ogg/revision/latest?cb=20121119074638',
+        src:
+        'https://vignette.wikia.nocookie.net/leagueoflegends/images/8/89/Katarina.attack1.ogg/revision/latest?cb=20121127000346',
         img: 'https://pa1.narvii.com/6523/f9c9f9becbc37e1cf7d3862e54a1b3e4ef88ecd2_128.gif',
         answers: [
           {

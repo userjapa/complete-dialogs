@@ -4,6 +4,9 @@
       <h2>Create</h2>
     </div>
     <div>
+      <Answers ref="answers"/>
+    </div>
+    <div>
       <AudioPlayer :audio="audio" autoplay="true"/>
     </div>
     <div>
@@ -61,6 +64,7 @@
 </template>
 <script>
 import AudioPlayer from '../../components/AudioPlayer'
+import Answers from '../../components/Answers'
 
 export default {
   name: "Create",
@@ -110,6 +114,7 @@ export default {
         if (validIndex > -1) {
           this.$store.commit('addAudio', audio)
           this.resetAudio()
+          this.$refs['answers'].setGame(this.audios)
         } else {
           alert('Correct answer must be selected!')
         }
@@ -136,6 +141,7 @@ export default {
     },
     update (audio) {
       this.$store.commit('update', audio)
+      this.$refs['answers'].setGame(this.audios)
       this.cancelUpdate()
     },
     cancelUpdate () {
@@ -158,7 +164,8 @@ export default {
     }
   },
   components: {
-    AudioPlayer
+    AudioPlayer,
+    Answers
   }
 }
 </script>

@@ -1,19 +1,17 @@
 <template>
 <div>
   <div>
-    <h2>Create</h2>
-  </div>
-
-  <Answers ref="answers" />
-
-  <div class="item item-border margin-top-20">
-    <AudioPlayer :audio="audio" />
-  </div>
-
-  <div class="item item-border margin-top-20 scroll container">
-
-    <div class="flex-basis-300 flex-grow-1 margin-10 item item-border item-form">
-      <div class="margin-bottom-20">
+    <div>
+      <h2>Create</h2>
+    </div>
+    <div>
+      <Answers :audios="audios"/>
+    </div>
+    <div>
+      <AudioPlayer :audio="audio" autoplay="true"/>
+    </div>
+    <div>
+      <div>
         <label for="audio_source">Source</label>
         <input class="input" id="audio_source" type="text" v-model="audio.src" @click="audio.src = 'https://vignette.wikia.nocookie.net/leagueoflegends/images/4/4a/Aatrox_Select.ogg/revision/latest?cb=20130520212430'" />
       </div>
@@ -121,7 +119,6 @@ export default {
         if (validIndex > -1) {
           this.$store.commit('addAudio', audio)
           this.resetAudio()
-          this.$refs['answers'].setGame(this.audios)
         } else {
           alert('Correct answer must be selected!')
         }
@@ -148,7 +145,6 @@ export default {
     },
     update(audio) {
       this.$store.commit('update', audio)
-      this.$refs['answers'].setGame(this.audios)
       this.cancelUpdate()
     },
     cancelUpdate() {
@@ -163,10 +159,10 @@ export default {
     }
   },
   computed: {
-    audios() {
+    audios () {
       return this.$store.getters['getAudios']
     },
-    isToUpdate() {
+    isToUpdate () {
       return this.$store.getters['isToUpdate']
     }
   },

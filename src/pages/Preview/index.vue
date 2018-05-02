@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Answers ref="answers"/>
+    <div>
+      <h2>Preview</h2>
+    </div>
+    <div>
+      <Answers :audios="audios"/>
+    </div>
   </div>
 </template>
 <script>
@@ -11,9 +16,10 @@ export default {
   components: {
     Answers
   },
-  mounted () {
-    const audios = this.$store.getters['getAudios']
-    this.$refs['answers'].setGame(audios)
+  computed: {
+    audios () {
+      return this.$store.getters['getAudios']
+    }
   }
 }
 </script>

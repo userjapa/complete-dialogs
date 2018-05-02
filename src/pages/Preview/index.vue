@@ -4,7 +4,7 @@
       <h2>Preview</h2>
     </div>
     <div>
-      <Answers ref="answers"/>
+      <Answers :audios="audios"/>
     </div>
   </div>
 </template>
@@ -16,9 +16,10 @@ export default {
   components: {
     Answers
   },
-  mounted () {
-    const audios = this.$store.getters['getAudios']
-    this.$refs['answers'].setGame(audios)
+  computed: {
+    audios () {
+      return this.$store.getters['getAudios']
+    }
   }
 }
 </script>

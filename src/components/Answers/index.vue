@@ -32,7 +32,6 @@ export default {
   name: "Answers",
   data () {
     return {
-      audios: [],
       current: {
         answers: [],
         answered: false
@@ -81,11 +80,6 @@ export default {
       if (right) right.classList.remove('right')
       if (wrong) wrong.classList.remove('wrong')
     },
-    setGame (audios) {
-      this.ended = false
-      this.audios = audios
-      this.setCurrent(this.audios)
-    },
     checkRight (answer, audio) {
       if (answer.correct && audio.answered) return true
       else return false
@@ -106,7 +100,6 @@ export default {
       if (this.oldIndex === null) this.oldIndex = index
       else this.oldIndex = this.currentIndex
       this.currentIndex = index
-      console.log(this.currentIndex, this.oldIndex);
       if (!(this.oldIndex === index)) this.resetBackground()
       this.current = this.audios[index]
     },
@@ -119,8 +112,20 @@ export default {
       else return false
     }
   },
+  props: [
+    'audios'
+  ],
   components: {
     AudioPlayer
+  },
+  watch: {
+    audios: function () {
+      this.ended = false
+      this.setCurrent(this.audios)
+    }
+  },
+  mounted () {
+    this.setCurrent(this.audios)
   }
 }
 </script>

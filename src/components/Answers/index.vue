@@ -14,17 +14,15 @@
 
     <div class="item margin-10 item-border flex-basis-300 flex-grow-1 list-content">
       <div v-for="(aswr, index) in current.answers" @click="selectAnswer(aswr, $event.target)" :ref="`answer${index}`" :class="{ right: checkRight(aswr, current), wrong: checkWrong(aswr, current) }">
-        <input type="radio" name="aswrs" value="" :id="'aswr-audio-' + index" class="margin-right-10">
+        <input type="radio" name="aswrs" value="" :id="'aswr-audio-' + index" class="margin-right-10" :checked="current.answered && aswr.selected">
         <label :for="'aswr-audio-' + index">{{ aswr.text }}</label>
       </div>
     </div>
   </div>
-
   <div>
     <button @click="setCurrent(audios)" v-if="current.answered && !ended" class="btn btn-primary">Next</button>
     <p v-if="ended">You've finished!</p>
   </div>
-
 </div>
 </template>
 <script>

@@ -1,5 +1,5 @@
 <template>
-<div class="">
+<div>
 
   <div class="menu">
     <div class="menu--content size margin container wrap align-items-center justify-content-between">

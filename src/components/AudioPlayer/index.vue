@@ -108,7 +108,7 @@ export default {
       loaded: false,
       isPlaying: false,
       duration: 0,
-      volume: 0.5,
+      volume: 1,
       time: 0,
       answers: []
     }

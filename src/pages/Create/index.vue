@@ -5,7 +5,7 @@
       <h2>Create</h2>
     </div>
     <div>
-      <Answers :audios="audios"/>
+      <Answers :audios="[audio]"/>
     </div>
     <div>
       <AudioPlayer :audio="audio" autoplay="true"/>
@@ -13,7 +13,7 @@
     <div>
       <div>
         <label for="audio_source">Source</label>
-        <input class="input" id="audio_source" type="text" v-model="audio.src" @click="audio.src = 'https://vignette.wikia.nocookie.net/leagueoflegends/images/4/4a/Aatrox_Select.ogg/revision/latest?cb=20130520212430'" />
+        <input class="input" id="audio_source" type="text" v-model="audio.src" @click="audio.src = 'https://vignette.wikia.nocookie.net/leagueoflegends/images/5/5a/AhriStarGuardian.Attack03.ogg/revision/latest?cb=20171128014755'" />
       </div>
       <div class="margin-bottom-20">
         <label for="audio_image">Image</label>
@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       audio: {
-        src: 'https://vignette.wikia.nocookie.net/leagueoflegends/images/4/4a/Aatrox_Select.ogg/revision/latest?cb=20130520212430',
+        src: 'https://vignette.wikia.nocookie.net/leagueoflegends/images/5/5a/AhriStarGuardian.Attack03.ogg/revision/latest?cb=20171128014755',
         img: 'https://pa1.narvii.com/6523/f9c9f9becbc37e1cf7d3862e54a1b3e4ef88ecd2_128.gif',
         answers: [{
             text: 'A new moon is rising',

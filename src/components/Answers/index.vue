@@ -1,27 +1,37 @@
 <template>
 <div class="item-border">
-
-  <div class="container align-items-start wrap">
-    <div class="flex-basis-300 flex-grow-1 item margin-10 item-border">
-      <div v-for="(ex, index) in audios" :ref="`audio${index}`" :class="{
-            disabled: !ex.answered,
-            success: (ex.answered && checkAnswer(ex.answers)),
-            failed: (ex.answered && !checkAnswer(ex.answers))
-          }" @click="viewCurrent(ex, index)">
-        <AudioPlayer :audio="ex" />
-      </div>
+  <div class="container column">
+    <div class="item">
+      <h3>{{ exercise.title }}</h3>
     </div>
-
-    <div class="item margin-10 item-border flex-basis-300 flex-grow-1 list-content">
-      <div v-for="(aswr, index) in current.answers" @click="selectAnswer(aswr, $event.target)" :ref="`answer${index}`" :class="{ right: checkRight(aswr, current), wrong: checkWrong(aswr, current) }">
-        <input type="radio" name="aswrs" value="" :id="'aswr-audio-' + index" class="margin-right-10" :checked="current.answered && aswr.selected">
-        <label :for="'aswr-audio-' + index">{{ aswr.text }}</label>
+  </div>
+  <div class="item">
+    <div class="container align-items-start wrap">
+      <div class="flex-basis-300 flex-grow-1 item margin-10 item-border">
+        <div v-for="(ex, index) in exercise.audios"
+        :ref="`audio${index}`"
+        class="audio"
+        :class="{
+          disabled: !ex.answered
+          }"
+          @click="viewCurrent(ex, index)">
+          <AudioPlayer :audio="ex" />
+        </div>
       </div>
     </div>
   </div>
-  <div>
-    <button @click="setCurrent(audios)" v-if="current.answered && !ended" class="btn btn-primary">Next</button>
-    <p v-if="ended">You've finished!</p>
+  <div class="item">
+    <div class="container align-items-start wrap row">
+      <div class="item margin-10 item-border flex-basis-300 flex-grow-1 list-content">
+        <div v-for="(aswr, index) in current.answers" @click="selectAnswer(aswr, $event.target)" :ref="`answer${index}`" class="option" :class="{ right: checkRight(aswr, current), wrong: checkWrong(aswr, current), selected: aswr.selected }">
+          {{ index + 1 }}) {{ aswr.text }}
+        </div>
+      </div>
+      <div class="item">
+        <button @click="setCurrent(exercise.audios)" v-if="current.answered && !ended" class="btn btn-primary">Next</button>
+        <p v-if="ended">You've finished!</p>
+      </div>
+    </div>
   </div>
 </div>
 </template>
@@ -34,21 +44,18 @@ export default {
     return {
       current: {
         answers: [],
-        answered: false
+        answered: false,
+        hit: false
       },
-      ended: false,
-      currentIndex: null,
-      oldIndex: null
+      ended: false
     }
   },
   methods: {
     setCurrent(audios) {
       for (const index in audios) {
         if (!audios[index].answered) {
-          setTimeout(() => {
-            this.$refs[`audio${index}`][0].classList.remove('disabled')
-          }, 0)
-          this.checkCurrent(index)
+          this.current = audios[index]
+          this.ended = false
           break
         } else {
           if (parseInt(index) === (audios.length - 1)) {
@@ -61,24 +68,9 @@ export default {
     selectAnswer(answer, el) {
       if (!this.current.answered) {
         answer.selected = true
-        const elAudio = this.$refs[`audio${this.currentIndex}`][0]
-        if (answer.correct) {
-          el.classList.add('right')
-          elAudio.classList.add('success')
-        } else {
-          el.classList.add('wrong')
-          elAudio.classList.add('failed')
-          const correctIndex = this.current.answers.findIndex(x => x.correct)
-          this.$refs[`answer${correctIndex}`][0].classList.add('right')
-        }
         this.current.answered = true
+        if (answer.correct) this.current.hit = true
       }
-    },
-    resetBackground() {
-      const right = document.querySelector('.right')
-      const wrong = document.querySelector('.wrong')
-      if (right) right.classList.remove('right')
-      if (wrong) wrong.classList.remove('wrong')
     },
     checkRight (answer, audio) {
       if (answer.correct && audio.answered) return true
@@ -95,16 +87,8 @@ export default {
       }
       return false
     },
-    checkCurrent(index) {
-      index = parseInt(index)
-      if (this.oldIndex === null) this.oldIndex = index
-      else this.oldIndex = this.currentIndex
-      this.currentIndex = index
-      if (!(this.oldIndex === index)) this.resetBackground()
-      this.current = this.audios[index]
-    },
     viewCurrent(audio, index) {
-      if (audio.answered && this.audios[this.currentIndex].answered) this.checkCurrent(index)
+      if (audio && audio.answered && this.exercise.audios[this.currentIndex].answered) this.current = this.exercise.audios[this.currentIndex]
     },
     checkSelected(audio) {
       const index = audio.answers.findIndex(x => x.selected)
@@ -113,7 +97,7 @@ export default {
     }
   },
   props: [
-    'audios'
+    'exercise'
   ],
   components: {
     AudioPlayer
@@ -121,11 +105,11 @@ export default {
   watch: {
     audios: function () {
       this.ended = false
-      this.setCurrent(this.audios)
+      this.setCurrent(this.exercise.audios)
     }
   },
   mounted () {
-    this.setCurrent(this.audios)
+    this.setCurrent(this.exercise.audios)
   }
 }
 </script>
@@ -139,5 +123,32 @@ export default {
             margin-bottom: 0;
         }
     }
+}
+
+.option {
+  background-color: #ddd;
+  border-radius: 15px;
+  padding-left: 10px;
+}
+
+.right {
+  background-color: green;
+}
+
+.wrong {
+  background-color: red;
+}
+
+.disabled {
+  background-color: gray;
+}
+
+.selected {
+  font-weight: bold;
+}
+
+.audio {
+  background-color: #ddd;
+  border-radius: 15px
 }
 </style>

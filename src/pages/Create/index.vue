@@ -5,12 +5,13 @@
       <h2>Create</h2>
     </div>
     <div>
-      <Answers :audios="[audio]"/>
+      <Answers :exercise="exercise" ref="answers"/>
     </div>
     <div>
-      <AudioPlayer :audio="audio" autoplay="true"/>
-    </div>
-    <div>
+      <div>
+        <label for="exercise_title">Title</label>
+        <input class="input" id="exercise_title" type="text" v-model="exercise.title">
+      </div>
       <div>
         <label for="audio_source">Source</label>
         <input class="input" id="audio_source" type="text" v-model="audio.src" @click="audio.src = 'https://vignette.wikia.nocookie.net/leagueoflegends/images/5/5a/AhriStarGuardian.Attack03.ogg/revision/latest?cb=20171128014755'" />
@@ -49,7 +50,7 @@
   </div>
 
   <div class="margin-top-20 margin-bottom-20 item item-border">
-    <div v-for="(ex, index) in audios" class="item item-border item-form">
+    <div v-for="(ex, index) in exercise.audios" class="item item-border item-form">
       <div>
         <strong>Source:</strong> {{ ex.src }}
       </div>
@@ -69,7 +70,6 @@
 </div>
 </template>
 <script>
-import AudioPlayer from '../../components/AudioPlayer'
 import Answers from '../../components/Answers'
 
 export default {
@@ -79,6 +79,8 @@ export default {
       audio: {
         src: 'https://vignette.wikia.nocookie.net/leagueoflegends/images/5/5a/AhriStarGuardian.Attack03.ogg/revision/latest?cb=20171128014755',
         img: 'https://pa1.narvii.com/6523/f9c9f9becbc37e1cf7d3862e54a1b3e4ef88ecd2_128.gif',
+        answered: false,
+        hit: false,
         answers: [{
             text: 'A new moon is rising',
             correct: true
@@ -106,11 +108,12 @@ export default {
   },
   methods: {
     resetAudio() {
-      this.audio = {
+      this.exercise.audio = {
         src: '',
         img: '',
         answers: [],
-        answered: false
+        answered: false,
+        hit: false
       }
     },
     addAudio(audio) {
@@ -118,6 +121,7 @@ export default {
         const validIndex = audio.answers.findIndex(x => x.correct)
         if (validIndex > -1) {
           this.$store.commit('addAudio', audio)
+          this.$refs['answers'].setCurrent(this.exercise.audio)
           this.resetAudio()
         } else {
           alert('Correct answer must be selected!')
@@ -159,16 +163,20 @@ export default {
     }
   },
   computed: {
-    audios () {
-      return this.$store.getters['getAudios']
+    exercise () {
+      return this.$store.getters['getExercise']
     },
     isToUpdate () {
       return this.$store.getters['isToUpdate']
     }
   },
   components: {
-    AudioPlayer,
     Answers
+  },
+  watch: {
+    'exercise.audios': function (audios) {
+      this.$refs[`answers`].setCurrent(audios)
+    }
   }
 }
 </script>

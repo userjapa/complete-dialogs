@@ -5,12 +5,18 @@ Vue.use(VueX)
 
 export default new VueX.Store({
   state: {
-    audios: [],
+    exercise: {
+      title: ``,
+      audios: []
+    },
     toUpdate: null
   },
   getters: {
-    getAudios ({ audios }) {
-      return audios
+    getExercise ({ exercise }) {
+      return exercise
+    },
+    getAudios ({ exercise }) {
+      return exercise.audios
     },
     isToUpdate({ toUpdate }) {
       if (toUpdate !== null) return true
@@ -18,18 +24,21 @@ export default new VueX.Store({
     }
   },
   mutations: {
+    saveExercise (state, exercise) {
+      state.exercise = exercise
+    },
     addAudio (state, audio) {
-      state.audios.push(audio)
+      state.exercise.audios.push(audio)
     },
     setToUpdate (state, id) {
       state.toUpdate = id
     },
     update (state, audio) {
       const index = state.toUpdate
-      state.audios[index] = audio
+      state.exercise.audios[index] = audio
     },
     remove (state, index) {
-      state.audios.splice(index, 1)
+      state.exercise.audios.splice(index, 1)
     }
   }
 })

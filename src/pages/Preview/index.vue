@@ -4,7 +4,7 @@
       <h2>Preview</h2>
     </div>
     <div>
-      <Answers :audios="audios"/>
+      <Answers :exercise="exercise"/>
     </div>
   </div>
 </template>
@@ -17,8 +17,8 @@ export default {
     Answers
   },
   computed: {
-    audios () {
-      return this.$store.getters['getAudios']
+    exercise () {
+      return this.$store.getters['getExercise']
     }
   }
 }
